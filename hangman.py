@@ -13,27 +13,57 @@ def start():
     # Welcome
     print("Welcome to Hangman\n")
     print("Loading word...")
+    x = input('Set your own word(y/n): ')
     
-    # Loads a random word
-    word = get_word()
+    if x =='y':
+        word = get_word2()
+    else: 
+        word = get_word()
+    
     length = len(word)
     print("Word to be guessed", end="\t")
     
-    # Prints the dashed line
     print('_'* length)
     
     
-    # TO-DO
-    # now you need to some how accept a letter every iteration(provided with get_letter function)
-    # And then you need to display the current string(with found charecters and dashes)
-    # use disp function
+    # Dict to store the letters
+    current = "_" * length
     
+    # PLay 
+    Lives = 20
+    while Lives > 0:
+        clear_terminal()
+        printlogo()
+        print('*'* 15)
+        print('Current Lives =', Lives, end="\n\n")
+        hangman(Lives)
+        print(current)
+        letter = get_letter()
+        next = disp(word, current, letter)
+        
+        if next == current:
+            Lives -= 1
+        
+        current = next
+    
+    print('GAME OVER')
+    sys.exit()
     
 def disp(word: str, current: str, guess: str) -> str: 
     
-    # takes as input 3 strings the first is the word like (hello), the second is the current guess like( h_llo) and the third is the letter like(e)
-    # you need to display the current orientation, update with new letters and then finnaly exit game if game is over
-    ...
+    new = ""
+    for i in range(len(current)):
+        if current[i] == '_' and word[i] == guess:
+            new += word[i]
+        else:
+            new += current[i]
+    
+    if new == word:
+        print('YOU WIN')
+        sys.exit()
+    
+    return new
+    
 
 def get_letter():
     while True:
@@ -52,6 +82,9 @@ def get_word():
         word = r.get_random_word()
         if len(word) < 5:
             return word
+
+def get_word2():
+    return input('Enter word: ')
 
 def printlogo():
     logo = ''' 
